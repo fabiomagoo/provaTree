@@ -12,6 +12,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/*
+ * Classe pra fazer requisição Rest na mão se precisar
+ * */
 public class API {
 
     public API() {

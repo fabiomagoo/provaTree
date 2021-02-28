@@ -1,5 +1,7 @@
 package br.com.tree.prova.model;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,7 +28,7 @@ public class Starship {
 	String edited;
 	
 	@JsonProperty("MGLT")
-	String mglt;
+	BigDecimal mglt;
 	
 	@JsonProperty("starship_class")
 	String starshipClass;

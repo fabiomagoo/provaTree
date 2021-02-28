@@ -30,8 +30,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
-                .title("Custom Title")
-                .description("Custom Description")
+                .title("Teste Tecnico Tree Tecnologia")
+                .description("Também conhecido como T4 ")
                 .version("1.0.0")
                 .build();
     }

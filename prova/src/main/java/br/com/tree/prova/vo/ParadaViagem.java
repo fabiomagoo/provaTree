@@ -14,7 +14,7 @@ public class ParadaViagem {
 	
 	@Override
 	public String toString() {
-		return String.format(" %s: %.0f paradas", this.nome, this.qtdParada);
+		return String.format("%s: %.0f paradas", this.nome, this.qtdParada);
 	}
 	
 }

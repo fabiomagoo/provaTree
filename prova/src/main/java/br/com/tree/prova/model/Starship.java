@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import br.com.tree.prova.DefaultZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,14 +20,17 @@ public class Starship {
 	String model;
 	String manufacturer;
 	String length;
-	String crew;
-	String passengers;	
+	String crew;		
 	String consumables;
 //	array  films;
 //	array  pilots;
 	String url;
 	String created;
 	String edited;
+	
+	//Custom criado pois existe valores "n/a" no SWAPI
+	@JsonDeserialize(using=DefaultZero.class, as=Integer.class)
+	Integer passengers;
 	
 	@JsonProperty("MGLT")
 	BigDecimal mglt;

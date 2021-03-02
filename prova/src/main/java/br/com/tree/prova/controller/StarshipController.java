@@ -47,6 +47,7 @@ public class StarshipController {
 		final String url =  "https://swapi.dev/api/starships/";
 		StarshipResults results = restTemplate.getForObject( String.format(url), StarshipResults.class);
 
+		//utilizado optional para evitar nullPointerException
 		return Optional.of(results)
 				.map( r -> r.getStarshipList())
 				.orElseThrow();

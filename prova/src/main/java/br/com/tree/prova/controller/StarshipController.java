@@ -2,10 +2,10 @@ package br.com.tree.prova.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -53,7 +53,9 @@ public class StarshipController {
 		final String url =  "https://swapi.dev/api/starships/";
 		StarshipResults results = restTemplate.getForObject( String.format(url), StarshipResults.class);
 
-		return results.getStarshipList();
+		return Optional.of(results)
+				.map( r -> r.getStarshipList())
+				.orElseThrow();
 	}
 
 	@ApiOperation(value = "Calcula a quantidade de paradas por nave")
@@ -61,15 +63,12 @@ public class StarshipController {
 	public List<String> calculaParadasPorNave(@RequestParam(required = true) BigDecimal distancia, @RequestParam(required = false) boolean parteAbastecido) {
 		
 		List<Starship> naveLista = getAll();
-		List<String> lista = new ArrayList<String>();
 		
-		for (Starship s : naveLista) {
-			BigDecimal qtdParadas = distancia.divide(s.getMglt(), parteAbastecido? RoundingMode.DOWN: RoundingMode.UP);
-			
-			lista.add( new ParadaViagem( s.getName(), s.getMglt(), qtdParadas ).toString() );
-		}
-
-		return lista;
+		return naveLista
+			.stream()
+			.map( s -> new ParadaViagem( s.getName(), s.getMglt(), calculaParadas(distancia, parteAbastecido, s) ))
+			.map( ParadaViagem::toString)
+			.collect( Collectors.toList());
 	}
 	
 	@ApiOperation(value = "Indica a melhor nave por nº de passageiros")
@@ -77,23 +76,22 @@ public class StarshipController {
 	public String melhorNavePraTransporte(@RequestParam(required = true) BigDecimal distancia, @RequestParam(required = true) Integer qtdPassageiros ) {
 		
 		List<Starship> naveLista = getAll();
-		String retorno = "";
 		
 		naveLista.sort(Comparator
 						.comparing(Starship::getMglt)						
 						.thenComparing(Starship::getPassengers)
-						.reversed()
-						 );
+						.reversed());
+
+		Starship melhorNave = naveLista
+			.stream()
+			.filter(s -> s.getPassengers() > qtdPassageiros)
+			.findFirst()
+			.orElseThrow();
 		
-		for (Starship s : naveLista) {
-			if( qtdPassageiros > s.getPassengers()) {
-				continue;
-			}			
-			
-			retorno = String.format("%s: é a melhor opção pois leva %s passageiros, percorrendo %.0f de distância por parada", s.getName(), s.getPassengers(), s.getMglt()  ) ;
-			break;
-		}
-		
-		return retorno;
+		return melhorNave.melhorOpcao();
+	}
+	
+	private BigDecimal calculaParadas(BigDecimal distancia, boolean parteAbastecido, Starship s) {
+		return distancia.divide(s.getMglt(), parteAbastecido? RoundingMode.DOWN: RoundingMode.UP);
 	}
 }

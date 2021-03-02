@@ -16,37 +16,42 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Starship {
-	String name;
-	String model;
-	String manufacturer;
-	String length;
-	String crew;		
-	String consumables;
+	private String name;
+	private String model;
+	private String manufacturer;
+	private String length;
+	private String crew;		
+	private String consumables;
 //	array  films;
 //	array  pilots;
-	String url;
-	String created;
-	String edited;
+	private String url;
+	private String created;
+	private String edited;
 	
 	//Custom criado pois existe valores "n/a" no SWAPI
 	@JsonDeserialize(using=DefaultZero.class, as=Integer.class)
-	Integer passengers;
+	private Integer passengers;
 	
 	@JsonProperty("MGLT")
-	BigDecimal mglt;
+	private BigDecimal mglt;
 	
 	@JsonProperty("starship_class")
-	String starshipClass;
+	private String starshipClass;
 	
 	@JsonProperty("cost_in_credits")
-	String costInCredits;
+	private String costInCredits;
 	
 	@JsonProperty("max_atmosphering_speed")
-	String maxAtmospheringSpeed;
+	private String maxAtmospheringSpeed;
+	
 	@JsonProperty("hyperdrive_rating")
-	String hyperdriveRating;
+	private String hyperdriveRating;
 	
 	@JsonProperty("cargo_capacity")
-	String cargoCapacity;
+	private String cargoCapacity;
+	
+	public String melhorOpcao() {
+		return String.format("%s: é a melhor opção pois leva %s passageiros, percorrendo %.0f de distância por parada", this.getName(), this.getPassengers(), this.getMglt()  ) ;
+	}
 	
 }

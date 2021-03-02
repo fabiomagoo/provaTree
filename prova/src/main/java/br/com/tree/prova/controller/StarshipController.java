@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,17 +33,12 @@ public class StarshipController {
 	
 	@ApiOperation(value = "Retorna uma nave")
 	@GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity <Starship> get(@RequestParam(required = true) Integer id) {
+	public Starship get(@RequestParam(required = true) Integer id) {
 		
 		final String url =  "https://swapi.dev/api/starships/%d/";
-		Starship starship = Optional.of( restTemplate.getForObject( String.format(url, id), Starship.class) )
+		return Optional.of( restTemplate.getForObject( String.format(url, id), Starship.class) )
 				.orElseThrow(() -> new ResourceNotFoundException( String.format("Starship com id %d nao encontrado", id)) );
-			
-		return ResponseEntity.ok(starship);
-	}
-	
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
+
 	}
 	
 	@ApiOperation(value = "Retorna todas as naves")
@@ -89,6 +83,10 @@ public class StarshipController {
 			.orElseThrow();
 		
 		return melhorNave.melhorOpcao();
+	}
+	
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
 	}
 	
 	private BigDecimal calculaParadas(BigDecimal distancia, boolean parteAbastecido, Starship s) {

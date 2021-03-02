@@ -4,3 +4,6 @@
 1º opção => pode se executar o batch InicializaAplicacao.bat
 
 2º opção => na raiz do projeto executar o comando mvnw spring-boot:run
+
+### Acesso
+ => a aplicação deve ser acessada na url http://localhost:8080/swagger-ui.html

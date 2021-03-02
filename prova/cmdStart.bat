@@ -1,1 +1,0 @@
-start /B mvnw spring-boot:run
